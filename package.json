@@ -1,0 +1,22 @@
+{
+  "name": "vite-crazy-kickstart",
+  "version": "1.2.1",
+  "type": "module",
+  "description": "A Vite template for React TypeScript projects with recoil, tailwindcss, aceternity configured",
+  "bin": {
+    "vite-crazy-kickstart": "./index.js"
+  },
+  "dependencies": {
+    "fs-extra": "^10.0.0"
+  },
+  "keywords": ["vite", "template", "react", "typescript", "recoil", "tailwindcss", "aceternity"],
+  "author": "lalith borana",
+  "license": "MIT",
+  "files": [
+    "./react-v1",
+    ".gitignore",
+    "./index.js",
+    "./LICENSE",
+    "./Readme.md"
+  ]
+}
