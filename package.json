@@ -1,6 +1,6 @@
 {
   "name": "vite-crazy-kickstart",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "type": "module",
   "description": "A Vite template for React TypeScript projects with recoil, tailwindcss, aceternity configured",
   "bin": {

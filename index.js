@@ -4,6 +4,9 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import pkg from "fs-extra";
 import readline from "readline";
+import fs from "fs";
+import { exec } from "child_process";
+import chalk from "chalk";
 
 const { existsSync, copy } = pkg;
 
@@ -16,30 +19,51 @@ const rl = readline.createInterface({
 });
 
 async function init() {
-  rl.question("Enter your project name: ", async (projectName) => {
+  rl.question(chalk.blue("Enter your project name: "), async (projectName) => {
     const targetPath = projectName || "my-vite-project"; 
     const templateDir = resolve(__dirname, "react-v1");
 
-    console.log(`Creating a new project in ${targetPath}...`);
+    console.log(chalk.green(`Creating a new project in ${targetPath}...`));
 
     if (existsSync(targetPath)) {
-      console.error("Directory already exists. Please choose a different name.");
+      console.error(chalk.red("Directory already exists. Please choose a different name."));
       process.exit(1);
     }
 
     try {
       await copy(templateDir, targetPath);
-      console.log("Project files copied!");
+      console.log(chalk.green("Project files copied!"));
 
-      process.chdir(targetPath);
+      // Create .gitignore file
+      const gitignoreContent = `
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+`.trim();
 
-      console.log("Project setup complete!");
-      console.log(`To start your project, run:
-        cd ${targetPath}
-        npm install
-        npm run dev`);
+      fs.writeFileSync(resolve(targetPath, '.gitignore'), gitignoreContent);
+      console.log(chalk.green(".gitignore file created!"));
+
+      // Initialize a new Git repository
+      exec(`git init`, { cwd: targetPath }, (err) => {
+        if (err) {
+          console.error(chalk.red("Error initializing git repository:"), err);
+          process.exit(1);
+        }
+
+        console.log(chalk.green("Git repository initialized!"));
+
+        process.chdir(targetPath);
+
+        console.log(chalk.green("Project setup complete!"));
+        console.log(chalk.yellow(`To start your project, run:
+          cd ${targetPath}
+          npm install
+          npm run dev`));
+      });
     } catch (err) {
-      console.error("Error creating project:", err);
+      console.error(chalk.red("Error creating project:"), err);
       process.exit(1);
     }
 
